@@ -76,16 +76,13 @@ docker login -u <username> -e <any_email_address> -p <token_value> <registry_ser
 
 get <registry_service_host:port> from registry pod in default project from console
 
-docker login -u justin -e justin.davis@ba.com -p N_XQ7bZuLSquUxSXSCOkPCYY8h9kxvykytVHMxoVfqI registry-ext-default.apps.192.168.140.152.xip.io:5000 
+docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry-default.apps.192.168.140.152.xip.io:80
 
+docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io:80/openshift/s2i-java-base
 
-docker login -u justin -e justin.davis@ba.com -p V2ifkPhcKgwKX3os9SnqP25G9UG1q7gWRotIbJt7i24 172.30.231.65:5000
+docker push docker-registry-default.apps.192.168.140.152.xip.io:80/openshift/s2i-java-base
 
-docker tag ib-tomcat-base 172.30.231.65:5000/openshift/ib-tomcat-base
-
-docker push 172.30.231.65:5000/openshift/ib-tomcat-base
-
-Now visible amonst "other images"
+Now visible amongst "other images"
 
 
 docker pull centos/postgresql-94-centos7
