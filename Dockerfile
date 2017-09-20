@@ -13,7 +13,7 @@ LABEL name="Centos Java Image" \
       vendor=jnd.org \
       license=GPLv2
 
-LABEL io.k8s.description="Image for building micro-service based deployments" \
+LABEL io.k8s.description="Image for building spring-boot micro-service apps" \
       io.k8s.display-name="Base Centos Java" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,java,http" \
@@ -23,7 +23,9 @@ LABEL io.k8s.description="Image for building micro-service based deployments" \
 RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm && \
  yum -y install wget curl java-1.8.0-openjdk-devel git ansible pyOpenSSL libxml2 libxslt && \
  yum clean all -y && \
- mkdir -p /app
+ mkdir -p /app \
+ mkdir -p /log \
+ mkdir -p /data
 
 WORKDIR /app
 

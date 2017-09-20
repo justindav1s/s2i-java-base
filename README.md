@@ -13,7 +13,7 @@ make
 
 or
 
-docker build -t java-service-base .
+docker build -t s2i-java-base .
 
 Run the image locally on docker
 
