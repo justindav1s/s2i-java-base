@@ -3,7 +3,7 @@ Testing Openshift's S2i capability
 
 https://github.com/justindav1s/s2i-java-base.git
 
-Build a base image running Centos7/OpenJDK 7/Tomcat7
+Build a base image running Centos7/OpenJDK 7
 
 Image built from Docker file
 
@@ -78,9 +78,11 @@ get <registry_service_host:port> from registry pod in default project from conso
 
 docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry-default.apps.192.168.140.152.xip.io:80
 
-docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io:80/openshift/s2i-java-base
+docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry.default.svc:5000
 
-docker push docker-registry-default.apps.192.168.140.152.xip.io:80/openshift/s2i-java-base
+docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io/shopping/s2i-java-base
+
+docker push docker-registry-default.apps.192.168.140.152.xip.io/shopping/s2i-java-base
 
 Now visible amongst "other images"
 
@@ -98,3 +100,16 @@ docker push 172.30.88.121:5000/openshift/ib-services-base
 https://forums.docker.com/t/command-to-remove-all-unused-images/20/5
 
 docker rmi `docker images | awk '{ print $3; }'`
+
+
+docker tag jd-tomcat docker-registry-default.apps.192.168.140.152.xip.io/test/jd-tomcat
+docker push docker-registry-default.apps.192.168.140.152.xip.io/test/jd-tomcat
+
+oc policy add-role-to-user \
+    system:image-puller system:serviceaccount:test:default \
+    --namespace=openshift
+    
+    
+oc secrets new-dockercfg jd-pull-secret \
+    --docker-server=docker-registry-default.apps.192.168.140.152.xip.io --docker-username=justin \
+    --docker-password=ARNitmnX8hggAHQth24PX1-AFOzRCNaJXZzdNzWUCNs --docker-email=justinndavis@gmail.com    

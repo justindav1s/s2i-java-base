@@ -16,18 +16,16 @@ if [[ "$1" == "-h" ]]; then
 	exec /usr/libexec/s2i/usage
 fi
 
-echo *** environment variables ****
-env
-echo ******************************
+echo "---> Installing application source"
+cp -Rf /tmp/src/. ./
 
-echo *** checking out ib-ansible-openshift ***
-git clone http://git-apps.192.168.140.7.xip.io/git/justin/ib-ansible-openshift.git
-ls -ltr ib-ansible-openshift
-echo *****************************************
+echo "---> Building Spring Boot application from source"
+echo "--> # MVN_ARGS = $MVN_ARGS"
+if [ -f "mvnw" ]; then
+  ./mvnw clean install $MVN_ARGS
+else
+  mvn clean install $MVN_ARGS
+fi
 
-
-echo "---> Executing the deployer script ........"
-
-/tmp/src/deploy.sh
-
-echo "---> Finished executing the deployer script ........"
+# Fix source directory permissions
+fix-permissions ./

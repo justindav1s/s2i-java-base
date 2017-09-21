@@ -1,10 +1,15 @@
 #!/bin/bash -e
 #
-# S2I run script for the 'ib-services' image.
+# S2I run script
 # The run script executes the server that runs your application.
 #
 # For more information see the documentation:
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
-exec /ib/appl/tomcat7/bin/catalina.sh run
+APP_TARGET=${APP_TARGET:-target}
+echo "---> Starting Spring Boot application"
+echo "--> # APP_TARGET = $APP_TARGET"
+echo "--> # JAVA_OPTS = $JAVA_OPTS"
+echo "---> Running application from jar ($(find $APP_TARGET -name *.jar)) ..."
+java $JAVA_OPTS -jar `find $APP_TARGET -name *.jar`
