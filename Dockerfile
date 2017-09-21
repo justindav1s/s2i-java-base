@@ -5,9 +5,9 @@ MAINTAINER Justin Davis <justinndavis@gmail.com>
 
 EXPOSE 8080
 
-ENV BUILDER_VERSION 1.0 \
- ENV JAVA_VERSON 1.8.0 \
- ENV MAVEN_VERSION 3.3.9
+ENV BUILDER_VERSION 1.0
+ENV JAVA_VERSON 1.8.0
+ENV MAVEN_VERSION 3.3.9
 
 LABEL name="Centos Java Image" \
       vendor=jnd.org \
