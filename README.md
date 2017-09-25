@@ -80,9 +80,9 @@ docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-reg
 
 docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry.default.svc:5000
 
-docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io/shopping/s2i-java-base
+docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io/test/s2i-java-base
 
-docker push docker-registry-default.apps.192.168.140.152.xip.io/shopping/s2i-java-base
+docker push docker-registry-default.apps.192.168.140.152.xip.io/test/s2i-java-base
 
 Now visible amongst "other images"
 

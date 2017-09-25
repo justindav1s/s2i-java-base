@@ -43,6 +43,7 @@ COPY ./.s2i/bin/ /usr/libexec/s2i
 RUN chown -R 1001:0 /app
 RUN chown -R 1001:0 /log
 RUN chown -R 1001:0 /data
+RUN chown -R 1001:0 /tmp
 USER 1001
 
 CMD ["/usr/libexec/s2i/usage"]
