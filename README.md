@@ -76,13 +76,16 @@ docker login -u <username> -e <any_email_address> -p <token_value> <registry_ser
 
 get <registry_service_host:port> from registry pod in default project from console
 
-docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry-default.apps.192.168.140.152.xip.io:80
+docker login -p E-oIdm4pTrFKQ-K2pRCzsfyarWIo-PfOjKk0BK93Lmo -u justin docker-registry-default.apps.192.168.140.152.xip.io
 
 docker login -p SU2AFOi26bZ3XbKWzwWjGYZqpLJEX0_47hMs5d8Y-5s -u justin docker-registry.default.svc:5000
 
 docker tag s2i-java-base docker-registry-default.apps.192.168.140.152.xip.io/test/s2i-java-base
 
 docker push docker-registry-default.apps.192.168.140.152.xip.io/test/s2i-java-base
+
+oc new-app test/s2i-java-base~https://github.com/justindav1s/simple-java-service.git
+
 
 Now visible amongst "other images"
 
