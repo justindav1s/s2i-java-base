@@ -40,9 +40,12 @@ RUN mkdir -p /usr/libexec/s2i
 
 COPY ./.s2i/bin/ /usr/libexec/s2i
 
-RUN chown -R 1001:0 /app
-RUN chown -R 1001:0 /log
-RUN chown -R 1001:0 /data
+RUN groupadd -r service && useradd -u 1001 -g service service
+
+RUN chown -R service:service /app && \
+    chown -R service:service /log && \
+    chown -R service:service /data && \
+    chmod -R 777 /log
 
 USER 1001
 
