@@ -20,5 +20,6 @@ docker login -p $TOKEN -u $USER $REGISTRY_HOST
 
 docker push $REGISTRY_HOST/$PROJECT/$IMAGE
 
-oc new-app $PROJECT/$IMAGE~https://github.com/justindav1s/simple-java-service.git
+#oc new-app $PROJECT/$IMAGE~https://github.com/justindav1s/simple-java-service.git
+oc create -f ../templates/java-base-ephemeral-template.json
 
