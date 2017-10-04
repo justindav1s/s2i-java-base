@@ -1,0 +1,187 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: java-microservice-pipeline-ephemeral
+  annotations:
+    openshift.io/display-name: Java Microservice, Jenkins pipeline build, ephemeral storage
+    description: Building Java based microservice instance Jenkins pipeline build and ephemeral storage. Source repo must provide a "Jenkinsfile" in its root.
+    iconClass: icon-openjdk
+    tags: java,microservice,instant-app
+objects:
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    labels:
+      app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+  spec:
+    triggers:
+    - type: ImageChange
+      imageChange: {}
+    - type: ConfigChange
+    source:
+      type: Git
+      git:
+        uri: "${SOURCE_REPOSITORY_URL}"
+        ref: "${SOURCE_REPOSITORY_REF}"
+    strategy:
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: Jenkinsfile.groovy
+        env:
+        - name: APPLICATION_NAME
+          value: "${APPLICATION_NAME}"
+        - name: ENVIRONMENT_NAME
+          value: "${ENVIRONMENT_NAME}"
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}:latest"
+    resources: {}
+    postCommit: {}
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    labels:
+      application: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    labels:
+      app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+  spec:
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 1200
+        maxUnavailable: 25%
+        maxSurge: 25%
+      resources: {}
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+        from:
+          kind: ImageStreamTag
+          name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}:latest"
+    - type: ConfigChange
+    replicas: 1
+    test: false
+    selector:
+      deploymentconfig: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    template:
+      metadata:
+        creationTimestamp:
+        labels:
+          app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+          deploymentconfig: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+      spec:
+        containers:
+        - name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+          image: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}:latest"
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          env:
+          - name: PATH
+            value: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          - name: BUILDER_VERSION
+            value: '1.0'
+          - name: APPLICATION_NAME
+            value: "${APPLICATION_NAME}"
+          - name: ENVIRONMENT_NAME
+            value: "${ENVIRONMENT_NAME}"
+          - name: JVM_ARGS
+            value: "${JVM_ARGS}"
+          resources:
+            limits:
+              memory: "${MEMORY_LIMIT}"
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: "/dev/termination-log"
+          imagePullPolicy: Always
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirst
+        securityContext: {}
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}"
+    labels:
+      app: "${APPLICATION_NAME}"
+  spec:
+    to:
+      kind: Service
+      name: "${APPLICATION_NAME}"
+    port:
+      targetPort: 80-tcp
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}"
+    labels:
+      app: "${APPLICATION_NAME}"
+  spec:
+    ports:
+    - name: 80-tcp
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+    selector:
+      deploymentconfig: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    type: ClusterIP
+    sessionAffinity: None
+  status:
+    loadBalancer: {}
+parameters:
+- name: ENVIRONMENT_NAME
+  description: The name of the environment. eg. dev1,dev2,uat ....
+  value: dev1
+  required: true
+- name: APPLICATION_NAME
+  description: The name of the application
+  value: simple-service
+  required: true
+- description: Git source URI for application
+  name: SOURCE_REPOSITORY_URL
+  value: https://github.com/justindav1s/simple-java-service.git
+  required: true
+- description: Git branch/tag reference
+  name: SOURCE_REPOSITORY_REF
+  value: master
+  required: false
+- name: MEMORY_LIMIT
+  displayName: Instance Memory Max Limit
+  description: Maximum amount of memory the container can use.
+  value: 1536Mi
+  required: true
+- name: JVM_ARGS
+  displayName: JVM arguments
+  description: Heap settings and sundry properties.
+  value: "-Xms1024m -Xmx1024m -XX:MaxPermSize=512m"
+  required: true

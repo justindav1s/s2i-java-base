@@ -2,10 +2,10 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: java-microservice-ephemeral
+  name: java-microservice-s2i-ephemeral
   annotations:
-    openshift.io/display-name: Java Microservice (Ephemeral)
-    description: Building Java based microservice instance
+    openshift.io/display-name: Java Microservice (Ephemeral + s2i)
+    description: Building Java based microservice instance with s2i
     iconClass: icon-openjdk
     tags: java,microservice,instant-app
 objects:
