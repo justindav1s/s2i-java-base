@@ -21,6 +21,8 @@ TOKEN=`oc whoami -t`
 
 docker login -p $TOKEN -u $USER $REGISTRY_HOST
 
+sleep 2
+
 docker push $REGISTRY_HOST/$IMAGE_NAMESPACE/$IMAGE
 
 #oc new-app $PROJECT/$IMAGE~https://github.com/justindav1s/simple-java-service.git
