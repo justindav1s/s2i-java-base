@@ -21,7 +21,7 @@ TOKEN=`oc whoami -t`
 
 docker login -p $TOKEN -u $USER $REGISTRY_HOST
 
-sleep 2
+sleep 3
 
 docker push $REGISTRY_HOST/$IMAGE_NAMESPACE/$IMAGE
 
