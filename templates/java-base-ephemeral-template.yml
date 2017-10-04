@@ -17,12 +17,6 @@ objects:
       app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
   spec:
     triggers:
-    - type: Generic
-      generic:
-        secret: 30b41cac9a086cbb
-    - type: GitHub
-      github:
-        secret: 6f9b9934bbd6cd77
     - type: ImageChange
       imageChange: {}
     - type: ConfigChange

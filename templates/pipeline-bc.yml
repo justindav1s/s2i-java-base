@@ -1,0 +1,11 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "simple-service-pipeline"
+spec:
+  source:
+    git:
+      uri: "https://github.com/justindav1s/simple-java-service.git"
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: Jenkinsfile

@@ -26,7 +26,7 @@ docker push $REGISTRY_HOST/$IMAGE_NAMESPACE/$IMAGE
 #oc new-app $PROJECT/$IMAGE~https://github.com/justindav1s/simple-java-service.git
 
 #required if we want CI builds, we need to give jenkins access to project
-oc policy add-role-to-user edit system:serviceaccount:ci:jenkins -n $PROJECT
+#oc policy add-role-to-user edit system:serviceaccount:ci:jenkins -n $PROJECT
 
 oc create -f ../templates/java-base-ephemeral-template.yml
 
