@@ -50,7 +50,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          namespace: openshift
+          namespace: boot-service
           name: s2i-java-base:latest
         env:
         - name: APPLICATION_NAME

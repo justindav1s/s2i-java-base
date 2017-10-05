@@ -3,7 +3,7 @@
 USER=justin
 PROJECT=boot-service
 IMAGE=s2i-java-base
-IMAGE_NAMESPACE=openshift
+IMAGE_NAMESPACE=$PROJECT
 REGISTRY_HOST=docker-registry-default.apps.192.168.140.152.xip.io
 
 oc login -u $USER
