@@ -40,9 +40,6 @@ objects:
     labels:
       app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
   spec:
-    triggers:
-    - type: ImageChange
-      imageChange: {}
     source:
       type: Git
       git:
