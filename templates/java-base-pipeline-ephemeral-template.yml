@@ -36,7 +36,7 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
+    name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}-s2i"
     labels:
       app: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
   spec:
