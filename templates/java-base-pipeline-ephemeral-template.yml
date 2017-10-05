@@ -85,16 +85,6 @@ objects:
         maxUnavailable: 25%
         maxSurge: 25%
       resources: {}
-    triggers:
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - "${APPLICATION_NAME}-${ENVIRONMENT_NAME}"
-        from:
-          kind: ImageStreamTag
-          name: "${APPLICATION_NAME}-${ENVIRONMENT_NAME}:latest"
-    - type: ConfigChange
     replicas: 1
     test: false
     selector:
