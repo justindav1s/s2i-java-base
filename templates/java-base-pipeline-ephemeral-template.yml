@@ -43,7 +43,6 @@ objects:
     triggers:
     - type: ImageChange
       imageChange: {}
-    - type: ConfigChange
     source:
       type: Git
       git:
